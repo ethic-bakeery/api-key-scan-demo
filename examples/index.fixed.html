@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Place Finder (fixed)</title>
+  <style>
+    body { font-family: system-ui, sans-serif; max-width: 32rem; margin: 3rem auto; padding: 0 1rem; }
+    input, button { font: inherit; padding: .5rem; }
+    #result { margin-top: 1rem; white-space: pre-wrap; }
+  </style>
+</head>
+<body>
+  <h1>Place Finder</h1>
+  <p>Type an address and get its coordinates.</p>
+  <input id="address" value="Lagos, Nigeria" aria-label="Address">
+  <button id="go">Find</button>
+  <div id="result"></div>
+
+  <script>
+    // FIXED: the browser holds no secret. It calls YOUR OWN backend endpoint
+    // (not included in this demo), which keeps the real key in a server-side
+    // environment variable / secret store and calls the third-party API itself.
+    document.getElementById("go").addEventListener("click", async () => {
+      const address = document.getElementById("address").value;
+      const out = document.getElementById("result");
+      try {
+        const res = await fetch("/api/geocode?address=" + encodeURIComponent(address));
+        out.textContent = JSON.stringify(await res.json(), null, 2);
+      } catch (err) {
+        out.textContent = "Request failed: " + err.message;
+      }
+    });
+  </script>
+</body>
+</html>
